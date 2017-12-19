@@ -1,0 +1,57 @@
+---
+title: "Keys and Strings"
+author: "Matthew Davis"
+date: "December 19, 2017"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = '')
+library(keysandstrings)
+```
+
+##### String Chunking
+ 
+basic string processing functions
+ 
+```{r}
+chunk_string('aaabbbcccddd',  chunk_len=3)
+split_key(c('aaabbb', 'aaaccc','bbbaaa'),  chunk_len = 3)
+```
+
+#####  level coder
+
+replaces a factor levels in a data frame with a code that with a consistant number of characters.  
+This feature helps for grouped time series in the hts package that requires keys with consistant length
+
+```{r}
+data = data.frame(x = rep(c('xkey1', 'xkey2'),2), y = rep(c('ykey1', 'ykey2', 'ykey3', 'ykey4')))
+lc = level_coder(data)
+x = predict(lc, data)
+print(x)
+predict(lc, x, rev = TRUE)
+key = predict(lc,data, use_primkey = TRUE)
+print(key)
+predict(lc,key, rev = TRUE, use_primkey = TRUE, verbose = FALSE)
+```
+
+##### TS Features
+
+get lagged features from time series data. Works on a data frame or a time seires object. Uses keys and a data col.
+Handles missing values by carrying the next forward.  This might be problematic for seasonal times series, so it's better to deal with NAs before running this. 
+
+
+```{r}
+data = data.frame(date = rep(1:10,2), key = c(rep('a',10), rep('b',10) ), val =c(1:10, 2:11))
+head(ts_features(data, time_col = 'date', 
+                    key_col = 'key', 
+                    val_col = 'val', 
+                    n_future = 2, 
+                    n_past = 2),10)
+
+head(ts_features(AirPassengers),2)
+
+tail(ts_features(AirPassengers),2)
+```

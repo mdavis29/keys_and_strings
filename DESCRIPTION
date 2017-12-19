@@ -1,0 +1,10 @@
+Package: keysandstrings
+Title: Keys and Strings
+Version: 0.1
+Authors@R: person("Matthew", "Davis", email = "mdavis29@gmail.com",
+                  role = c("aut", "cre"))
+Description: recode factors in data frames, basic string manipulation
+Depends:
+License: MIT 
+LazyData: true
+RoxygenNote: 6.0.1
