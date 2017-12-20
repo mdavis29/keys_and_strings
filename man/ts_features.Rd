@@ -4,21 +4,12 @@
 \alias{ts_features}
 \title{Time Series Features from Data Frame}
 \usage{
-ts_features(data, time_col = NULL, key_col = NULL, val_col = NULL,
-  n_future = 6, n_past = 6)
+ts_features(data, params = list(), verbose = TRUE)
 }
 \arguments{
 \item{data}{a data frame or time series}
 
-\item{time_col}{char time col in data}
-
-\item{key_col}{char primary key for the data frame}
-
-\item{val_col}{char value column in data frame}
-
-\item{n_future}{int number of future steps}
-
-\item{n_past}{int number of past steps (lags)}
+\item{verbose}{print debugging output}
 }
 \value{
 a matrix of split text

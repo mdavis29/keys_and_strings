@@ -1,12 +1,7 @@
 #' @title Time Series Features from Data Frame
 #' @param data a data frame or time series
-#' @param params a list of parameter 
-#' \itemize{ 
-#' \item time_col = NULL
-#' \item key_col = NULL
-#' \item val_col = NULL
-#' \item n_future = 6
-#' \item n_past = 6
+#' @param params a list of parameter list'time_col = NULL,key_col = NULL,val_col = NULL,n_future = 6,n_past = 6
+#' @param verbose print debugging output
 #'
 #' @author Matthew Davis
 #' @description splits a string in to chunks of length chunk_len, returns a matrix

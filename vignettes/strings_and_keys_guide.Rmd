@@ -69,9 +69,13 @@ new_data[ order(new_data$key, new_data$date),]
 
 
 ```{r keyscaler}
-data = data.frame(key = c(rep('a',4), rep(' b',4)), val1 =  c(1:8), val2 = c(2:9)) 
+data = data.frame(key = c(rep('a',40), rep(' b',40)), val1 =  c(1:80), val2 = c(2:81)) 
 params = list(key_col = 'key', trans_cols = c('val1', 'val2'), scale = TRUE, center = TRUE)
 ks = keyscale(data, params)
+x = predict(ks, data)
+head(data)
+head(x)
+head(predict(ks, x, rev = TRUE))
 ```
 
 
