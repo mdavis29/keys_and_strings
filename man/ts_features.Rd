@@ -9,6 +9,8 @@ ts_features(data, params = list(), verbose = TRUE)
 \arguments{
 \item{data}{a data frame or time series}
 
+\item{params}{a list of parameter list'time_col = NULL,key_col = NULL,val_col = NULL,n_future = 6,n_past = 6}
+
 \item{verbose}{print debugging output}
 }
 \value{

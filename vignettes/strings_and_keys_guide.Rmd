@@ -78,5 +78,14 @@ head(x)
 head(predict(ks, x, rev = TRUE))
 ```
 
+##### Black list
 
+```{r black_list}
+
+data = data.frame(a = c(rep('aa', 9), 'b'), b = c(rep('aa', 10)))
+bl = black_list(data, cols = c('a', 'b'), freq = 9 )
+predict(bl, data)
+
+
+```
 

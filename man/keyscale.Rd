@@ -9,7 +9,7 @@ keyscale(data, params = list())
 \arguments{
 \item{data}{a data frame like object}
 
-\item{params}{list "key_col = NULL, trans_cols = NULL, scale = TRUE, center = TRUE"}
+\item{params}{list(key_col = NULL, trans_cols = NULL, scale = TRUE, center = TRUE)}
 }
 \value{
 a keyscale_obj
