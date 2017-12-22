@@ -7,32 +7,31 @@
 #' @export
 #'
 
-keyscale = function(data, params = list()){
-  param_names = names(params)
-  p = list(key_col = NULL, trans_cols = NULL, scale = TRUE, center = TRUE)
-  l = length(param_names)
-  if(l > 0){ #ceates list of parameters
-    for ( i in 1:l ){
-      p[param_names[i]] = params[param_names[i]]
-    }
+keyscale = function(data, val_cols = NULL, key_col = NULL){
+  data = data.frame(data)
+  if(is.null(val_col)){ # there is no value col, use all numeric and integer cols
+    val_col = colnames(data)[lapply(data, class) %in% c('numeric', 'integer')]
+    val_col = val_col[!val_col %in% key_col]
   }
-  if(is.null(p$trans_cols)){
-    p$trans_cols = colnames(data)[lapply(data, class) %in% c('integer', 'numeric')]
+  if(is.null(key_col)){ # if there is no key col, create one with one value
+    data$temp_key = rep(1, nrow(data))
+    key_col = temp_key
   }
-  have_keys = unique(data[,p$key_col])
-  nkeys = length(have_keys)
-  scales = list(have_keys)
+  keys = unique(data[, key_col])
+  nkeys = length(keys)
+  key_output = as.list(keys)
   for(i in 1:nkeys){
-    temp_key = have_keys[i]
-    temp_data =data[data[,p$key_col] == temp_key,p$trans_cols]
-    means = apply(temp_data, 2, mean, na.rm = TRUE)
-    sds = apply(temp_data, 2, sd, na.rm = TRUE)
-    scales[[temp_key]] = list(means = means, sds = sds)
+    temp_key = keys[i]
+    temp_data = data[data[, key_col] == temp_key, val_col]
+    means = apply(temp_data,2,mean, na.rm = TRUE)
     means[is.na(means)] = 0
+    sds = apply(temp_data,2,sd, na.rm = TRUE)
     sds[is.na(sds)] = 1
+    mat = rbind(means, sds)
+    key_output[[i]] = mat
   }
-  names(scales) = have_keys
-  output = list(scales = scales, params = p)
+  names(key_output) = keys
+  output = list(scales = key_output, key_col = key_col)
   class(output) = append('keyscale_obj', class(output))
   return(output)
 }
@@ -48,38 +47,38 @@ keyscale = function(data, params = list()){
 #'
 
 
-predict.keyscale_obj <- function(object, data, rev = FALSE){
-  have_keys = unique(data[,object$params$key_col])  
-  new_keys = setdiff(have_keys , names(object$scales))
-  nkeys = length(have_keys)
-  have_cols = intersect(colnames(data),object$params$trans_cols)
-  ncols = object$params$trans_cols
-  if(length(new_keys)>0)warning(paste('found new_keys:', new_keys))
-  if(!rev){
-    for (i in 1:nkeys){
-      temp_key = have_keys[i]
-        temp_col = have_cols[i]
-        temp_mean = object$scales[[temp_key]]$means[have_cols]
-        temp_sd = object$scales[[temp_key]]$sds[have_cols]
-        temp_data = data[data[,object$params$key_col] == temp_key, have_cols]
-        temp_data_scaled = scale(temp_data, center = temp_mean, scale = temp_sd)
-        data[data[,object$params$key_col] == temp_key, have_cols] = temp_data_scaled 
-      
-    }
-    attr(data, 'scaled') <- TRUE
+predict.keyscale_obj <- function(object, data, unscale = FALSE, verbose = FALSE){
+  data = data.frame(data)
+  have_cols = intersect(colnames(object$scales[[1]]), colnames(data))
+  keys = names(object$scales)
+  nkeys = length(keys)
+  nc = length(have_cols)
+  if(nkeys == 1 & !object$key_col %in% colnames(data)){
+    data$temp_key = rep(1, nrow(data))
   }
-  if(rev ){
-    if(!attr(data, 'scaled'))warning('attr "scaled" not attached to data')
     for (i in 1:nkeys){
-      temp_key = have_keys[i]
-      temp_col = have_cols[i]
-      temp_mean = object$scales[[temp_key]]$means[have_cols]
-      temp_sd = object$scales[[temp_key]]$sds[have_cols]
-      temp_data = data[data[,object$params$key_col] == temp_key, have_cols]
-      temp_data_scaled = scale(temp_data, center = -temp_mean, scale = 1/temp_sd)
-      data[data[,object$params$key_col] == temp_key, have_cols] = temp_data_scaled 
-    }
-  }
+    temp_key = keys[i]
+    temp_data = data[data[,key_col] == temp_key, have_cols ]
+    temp_scale = object$scales[[temp_key]][, have_cols]
+    if(!unscale){
+      if(verbose){print('scaling')}
+      for (j in 1:nc){
+        temp_col = have_cols[j]
+        temp_data[, temp_col]=(temp_data[, temp_col] + temp_scale[1,temp_col])/temp_scale[2,temp_col] 
+        data[,temp_col] = temp_data
+      }
+    attr(data, 'scaled') = TRUE
+    } # end scaling case
+    if(unscale | attr(data, 'scaled')){
+      if(verbose)print('unscaling')
+      for (j in 1:nc){
+        temp_col = have_cols[j]
+        temp_data[, temp_col] =temp_data[, temp_col]*temp_scale[2,temp_col]+ temp_scale[1,temp_col] 
+        data[,temp_col] = temp_data
+      }
+      attr(data, 'scaled') = NULL
+    } # end unscaling case
+  } # end loop through keys
   return(data)
 }
   

@@ -16,7 +16,7 @@ library(keysandstrings)
  
 basic string processing functions
  
-```{r string functions}
+```{r chunk and split}
 chunk_string('aaabbbcccddd',  chunk_len=3)
 split_key(c('aaabbb', 'aaaccc','bbbaaa'),  chunk_len = 3)
 ```
@@ -26,16 +26,15 @@ split_key(c('aaabbb', 'aaaccc','bbbaaa'),  chunk_len = 3)
 replaces a factor levels in a data frame with a code that with a consistant number of characters.  
 This feature helps for grouped time series in the hts package that requires keys with consistant length
 
-```{r level coder}
-data = data.frame(x = rep(c('xkey1', 'xkey2'),2), y = rep(c('ykey1', 'ykey2', 'ykey3', NA)))
-data
+```{r strings functions}
+data = data.frame(x = rep(c('xkey1', 'xkey2'),2), y = rep(c('ykey1', 'ykey2', 'ykey3', 'ykey4')))
 lc = level_coder(data)
 x = predict(lc, data)
 print(x)
 predict(lc, x, rev = TRUE)
-key = predict(lc,data,return_primkey =  TRUE)
+key = predict(lc,data, use_primkey = TRUE)
 print(key)
-predict(lc, key)
+predict(lc,key, rev = TRUE, use_primkey = TRUE, verbose = FALSE)
 ```
 
 ##### TS Features
@@ -71,12 +70,11 @@ new_data[ order(new_data$key, new_data$date),]
 
 ```{r keyscaler}
 data = data.frame(key = c(rep('a',40), rep(' b',40)), val1 =  c(1:80), val2 = c(2:81)) 
-params = list(key_col = 'key', trans_cols = c('val1', 'val2'), scale = TRUE, center = TRUE)
-ks = keyscale(data, params)
+ks = keyscale(data)
 x = predict(ks, data)
 head(data)
 head(x)
-head(predict(ks, x, rev = TRUE))
+head(predict(ks, x, unscale= TRUE))
 ```
 
 ##### Black list
@@ -85,7 +83,11 @@ head(predict(ks, x, rev = TRUE))
 
 data = data.frame(a = c(rep('aa', 9), 'b'), b = c(rep('aa', 10)))
 bl = black_list(data, cols = c('a', 'b'), freq = 9 )
-predict(bl, data)
+predict(bl, data, keep_rows = TRUE)
+wl = black_list(data, cols = c('a', 'b'), freq = 9, white_list = TRUE )
+predict(bl, data, keep_rows = TRUE)
+
+
 
 
 ```
