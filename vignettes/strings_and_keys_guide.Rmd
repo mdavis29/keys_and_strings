@@ -16,7 +16,7 @@ library(keysandstrings)
  
 basic string processing functions
  
-```{r}
+```{r string functions}
 chunk_string('aaabbbcccddd',  chunk_len=3)
 split_key(c('aaabbb', 'aaaccc','bbbaaa'),  chunk_len = 3)
 ```
@@ -26,15 +26,16 @@ split_key(c('aaabbb', 'aaaccc','bbbaaa'),  chunk_len = 3)
 replaces a factor levels in a data frame with a code that with a consistant number of characters.  
 This feature helps for grouped time series in the hts package that requires keys with consistant length
 
-```{r strings functions}
-data = data.frame(x = rep(c('xkey1', 'xkey2'),2), y = rep(c('ykey1', 'ykey2', 'ykey3', 'ykey4')))
+```{r level coder}
+data = data.frame(x = rep(c('xkey1', 'xkey2'),2), y = rep(c('ykey1', 'ykey2', 'ykey3', NA)))
+data
 lc = level_coder(data)
 x = predict(lc, data)
 print(x)
 predict(lc, x, rev = TRUE)
-key = predict(lc,data, use_primkey = TRUE)
+key = predict(lc,data,return_primkey =  TRUE)
 print(key)
-predict(lc,key, rev = TRUE, use_primkey = TRUE, verbose = FALSE)
+predict(lc, key)
 ```
 
 ##### TS Features

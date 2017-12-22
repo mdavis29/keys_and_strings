@@ -31,7 +31,7 @@ black_list = function(data, cols, freq = 12, white_list = FALSE){
 #' @return a matrix of split text
 #' @export
 #' 
-predict.bl = function(object, data){
+predict.bl = function(object, data, keep_rows = FALSE, val = 'black_listed'){
   have_names = intersect(names(object), colnames(data))
   n_names = length(have_names)
   temp_data = data
@@ -40,10 +40,26 @@ predict.bl = function(object, data){
     temp_name = have_names[i]
     temp_blist = object[[temp_name]]
     if(!white_list){
+      if(!keep_rows){
       temp_data = temp_data[!temp_data[, have_names[i]] %in% temp_blist,]
-    }
+      }
+      if(keep_rows){
+        temp_col = temp_data[,have_names[i]]
+        levels(temp_col) = append(levels(temp_col), val)
+        temp_col[temp_col %in% temp_blist] = val
+        temp_data[,have_names[i]] = temp_col
+        }
+      }
     if(white_list){
-      temp_data = temp_data[temp_data[, have_names[i]] %in% temp_blist,]
+      if(keep_rows){
+        temp_data = temp_data[temp_data[, have_names[i]] %in% temp_blist,]
+      }
+      if(keep_rows){
+        temp_col = temp_data[,have_names[i]]
+        levels(temp_col) = append(levels(temp_col), val)
+        temp_col[!temp_col %in% temp_blist] = val
+        temp_data[,have_names[i]] = temp_col
+      }
     }
   }
   temp_data = droplevels(temp_data)
