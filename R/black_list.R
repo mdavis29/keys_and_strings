@@ -24,14 +24,17 @@ black_list = function(data, cols, freq = 12, white_list = FALSE){
 }
 
 #' @title predict method for blacklist object 
+#' @param object a bl object ('blacklist')
 #' @param data a data frame including factor variables
-#' @param cols cols to look at minimum frequey
+#' @param keep_rows logical, whether to keep all rows and fill with val
+#' @param val charstring a value to fill the blacklisted objects with
+#' @param ... addtional params
 #' @author Matthew Davis
 #' @description splits a string in to chunks of length chunk_len, returns a matrix
 #' @return a matrix of split text
 #' @export
 #' 
-predict.bl = function(object, data, keep_rows = FALSE, val = 'black_listed'){
+predict.bl = function(object, data, keep_rows = FALSE, val = 'black_listed', ...){
   have_names = intersect(names(object), colnames(data))
   n_names = length(have_names)
   temp_data = data

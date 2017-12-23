@@ -1,15 +1,19 @@
 ---
 title: "Keys and Strings"
 author: "Matthew Davis"
-date: "December 19, 2017"
-output:
-  pdf_document: default
-  html_document: default
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, comment = '')
-library(keysandstrings)
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = ""
+)
 ```
 
 ##### String Chunking
@@ -17,6 +21,7 @@ library(keysandstrings)
 basic string processing functions
  
 ```{r chunk and split}
+library(keysandstrings)
 chunk_string('aaabbbcccddd',  chunk_len=3)
 split_key(c('aaabbb', 'aaaccc','bbbaaa'),  chunk_len = 3)
 ```
@@ -32,9 +37,9 @@ lc = level_coder(data)
 x = predict(lc, data)
 print(x)
 predict(lc, x, rev = TRUE)
-key = predict(lc,data, use_primkey = TRUE)
+key = predict(lc,data, return_primkey = TRUE)
 print(key)
-predict(lc,key, rev = TRUE, use_primkey = TRUE, verbose = FALSE)
+predict(lc,key)
 ```
 
 ##### TS Features
@@ -66,15 +71,20 @@ new_data = ts_features(data, params)
 new_data[ order(new_data$key, new_data$date),]
 ```
 
+#### Key Scaler
 
+Center and Scale new data, and uncenter and scale, all optional primary key ( creates a scale for each column and each set of keyed rows ) 
 
 ```{r keyscaler}
-data = data.frame(key = c(rep('a',40), rep(' b',40)), val1 =  c(1:80), val2 = c(2:81)) 
-ks = keyscale(data)
-x = predict(ks, data)
+data = as.matrix(data.frame(key = c(rep(1,40), rep(2,40)), 
+                  val1 =  c(1:79, NA), 
+                  val2 = c(1:80), 
+                  val3 = rep(1, 80))) 
 head(data)
+ks = keyscale(data, key_col = 'key')
+x = predict(ks, data)
 head(x)
-head(predict(ks, x, unscale= TRUE))
+head(predict(ks, x))
 ```
 
 ##### Black list

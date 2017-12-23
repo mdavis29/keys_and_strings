@@ -32,15 +32,16 @@ level_coder <- function(data){
 #' @param object a 'level_coder_obj' class object
 #' @param data data frame of new data
 #' @param rev reverse the transformation
-#' @param use_primkey use a primary key
+#' @param return_primkey use a primary key
 #' @param primkey_col column to find the primary key
+#' @param ... addtional params
 #' @param verbose print debugging
 #' @author Matthew Davis
 #' @description splits a string in to chunks of length chunk_len, returns a matrix
 #' @return a matrix of split text
 #' @export
 
-predict.level_coder_obj<-function(object, data, rev = FALSE, return_primkey = FALSE, primkey_col = 'primkey', verbose  = FALSE){
+predict.level_coder_obj<-function(object, data, rev = FALSE, return_primkey = FALSE, primkey_col = 'primkey', verbose  = FALSE, ...){
   # case when data is a primary key
   primkey = NULL
   if(!is.null(attr(data,'primkey'))){

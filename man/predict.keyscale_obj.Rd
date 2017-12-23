@@ -4,17 +4,22 @@
 \alias{predict.keyscale_obj}
 \title{Predict Key Scale}
 \usage{
-\method{predict}{keyscale_obj}(object, data, rev = FALSE)
+\method{predict}{keyscale_obj}(object, data, unscale = FALSE,
+  verbose = FALSE, ...)
 }
 \arguments{
 \item{object}{a keyscale_obj}
 
 \item{data}{new data frame like object}
 
-\item{rev}{unscale a scaled object}
+\item{unscale}{unscale a scaled object ( will auto read when scaled attr is set from previous predict)}
+
+\item{verbose}{print debugging}
+
+\item{...}{addtional params}
 }
 \value{
-a keyscale_obj
+a data frame with either scale or unscaled values
 }
 \description{
 creates seperate scales by a key

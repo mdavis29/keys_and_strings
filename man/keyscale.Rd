@@ -4,12 +4,16 @@
 \alias{keyscale}
 \title{Key Scaler}
 \usage{
-keyscale(data, params = list())
+keyscale(data, val_col = NULL, key_col = NULL, verbose = FALSE)
 }
 \arguments{
 \item{data}{a data frame like object}
 
-\item{params}{list(key_col = NULL, trans_cols = NULL, scale = TRUE, center = TRUE)}
+\item{val_col}{char vector of value columns (optional)}
+
+\item{key_col}{key column (a seperate key will be made for each key)}
+
+\item{verbose}{print debugging}
 }
 \value{
 a keyscale_obj

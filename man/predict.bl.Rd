@@ -4,12 +4,19 @@
 \alias{predict.bl}
 \title{predict method for blacklist object}
 \usage{
-\method{predict}{bl}(object, data)
+\method{predict}{bl}(object, data, keep_rows = FALSE, val = "black_listed",
+  ...)
 }
 \arguments{
+\item{object}{a bl object ('blacklist')}
+
 \item{data}{a data frame including factor variables}
 
-\item{cols}{cols to look at minimum frequey}
+\item{keep_rows}{logical, whether to keep all rows and fill with val}
+
+\item{val}{charstring a value to fill the blacklisted objects with}
+
+\item{...}{addtional params}
 }
 \value{
 a matrix of split text
