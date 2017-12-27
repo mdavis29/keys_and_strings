@@ -31,7 +31,7 @@ split_key(c('aaabbb', 'aaaccc','bbbaaa'),  chunk_len = 3)
 replaces a factor levels in a data frame with a code that with a consistant number of characters.  
 This feature helps for grouped time series in the hts package that requires keys with consistant length
 
-```{r strings functions}
+```{r level coder}
 data = data.frame(x = rep(c('xkey1', 'xkey2'),2), y = rep(c('ykey1', 'ykey2', 'ykey3', 'ykey4')))
 lc = level_coder(data)
 x = predict(lc, data)
@@ -39,7 +39,7 @@ print(x)
 predict(lc, x, rev = TRUE)
 key = predict(lc,data, return_primkey = TRUE)
 print(key)
-predict(lc,key)
+predict(lc,key[1], rev = TRUE)
 ```
 
 ##### TS Features
@@ -96,6 +96,23 @@ bl = black_list(data, cols = c('a', 'b'), freq = 9 )
 predict(bl, data, keep_rows = TRUE)
 wl = black_list(data, cols = c('a', 'b'), freq = 9, white_list = TRUE )
 predict(bl, data, keep_rows = TRUE)
+
+```
+
+
+```{r sparse encoder}
+data = data.frame(x = rep(x = c(NA,letters[1:4]), 5), y = rep(c(NA,letters[5:8]), 5), z = c(1:24, NA), zz = 1:25)
+lc = sparseEncoder(data)
+predict(lc, data)
+
+```
+
+
+
+```{r find strings}
+data = c('aabb', 'aacc', 'aaaa', 'bbaa','bbbb','bbcc')
+preFixes = c('aa', 'bb')
+```
 
 
 

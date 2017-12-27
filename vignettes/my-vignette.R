@@ -9,7 +9,7 @@ library(keysandstrings)
 chunk_string('aaabbbcccddd',  chunk_len=3)
 split_key(c('aaabbb', 'aaaccc','bbbaaa'),  chunk_len = 3)
 
-## ----strings functions---------------------------------------------------
+## ----level coder---------------------------------------------------------
 data = data.frame(x = rep(c('xkey1', 'xkey2'),2), y = rep(c('ykey1', 'ykey2', 'ykey3', 'ykey4')))
 lc = level_coder(data)
 x = predict(lc, data)
@@ -17,7 +17,7 @@ print(x)
 predict(lc, x, rev = TRUE)
 key = predict(lc,data, return_primkey = TRUE)
 print(key)
-predict(lc,key)
+predict(lc,key[1], rev = TRUE)
 
 ## ----tsfeatures----------------------------------------------------------
 head(ts_features(AirPassengers),2)
@@ -61,6 +61,13 @@ wl = black_list(data, cols = c('a', 'b'), freq = 9, white_list = TRUE )
 predict(bl, data, keep_rows = TRUE)
 
 
+## ----sparse encoder------------------------------------------------------
+data = data.frame(x = rep(x = c(NA,letters[1:4]), 5), y = rep(c(NA,letters[5:8]), 5), z = c(1:24, NA), zz = 1:25)
+lc = sparseEncoder(data)
+predict(lc, data)
 
 
+## ----find strings--------------------------------------------------------
+data = c('aabb', 'aacc', 'aaaa', 'bbaa','bbbb','bbcc')
+preFixes = c('aa', 'bb')
 

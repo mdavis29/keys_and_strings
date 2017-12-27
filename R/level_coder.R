@@ -33,7 +33,6 @@ level_coder <- function(data){
 #' @param data data frame of new data
 #' @param rev reverse the transformation
 #' @param return_primkey use a primary key
-#' @param primkey_col column to find the primary key
 #' @param ... addtional params
 #' @param verbose print debugging
 #' @author Matthew Davis
@@ -41,27 +40,26 @@ level_coder <- function(data){
 #' @return a matrix of split text
 #' @export
 
-predict.level_coder_obj<-function(object, data, rev = FALSE, return_primkey = FALSE, primkey_col = 'primkey', verbose  = FALSE, ...){
+predict.level_coder_obj<-function(object, data, rev = FALSE, return_primkey = FALSE, verbose  = FALSE, ...){
   # case when data is a primary key
   primkey = NULL
   if(!is.null(attr(data,'primkey'))){
     if(attr(data,'primkey')){
       primkey = as.character(data)}
   }
-  # case when data is a df and contains a primary key
-  if(class(data)%in% 'data.frame'){
-    primkeys = unlist(lapply(data, function(x)attr(x,'primkey')))
-    primkeys = names(primkeys)[!is.null(primkeys)]
-    if(!is.null(primkeys)){
-      primkey = as.character(data[, primkeys])
-      }
+  if(rev & is.null(dim(data))){
+    primkey = as.character(data)
   }
+ 
+  # case when data is a df and contains a primary key
   if(!is.null(primkey)){
+    if(verbose)print('using primary key')
     data = split_key(primkey, 3)
     if(ncol(data)!=length(names(object))){stop('key split into different numbner of columns than object names')}
     colnames(data) = names(object)
     data[data == 'zzz'] = NA
     rev = TRUE
+    if(verbose)print(head(data))
   }
   # case when data is a factor or a matrix
   if(is.null(dim(data))){
@@ -75,6 +73,13 @@ predict.level_coder_obj<-function(object, data, rev = FALSE, return_primkey = FA
   have_cols = intersect(names(object), colnames(data))
   need_cols = setdiff(names(object), colnames(data))
 # if there are missing columns in the data required by the encoder
+  if(verbose){
+    print('final dims')
+    print(dim(data))
+    print(head(data),2)
+    print(paste('have_cols', paste(have_cols, collapse = ',')))
+    print(paste('need_cols', paste(need_cols, collapse = ',')))
+  }
   if(length(need_cols)!=0){
     stop(paste('missing cols in data', paste(need_cols, collapse = ',')))
   }

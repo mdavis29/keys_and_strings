@@ -110,12 +110,9 @@ key =<span class="st"> </span><span class="kw">predict</span>(lc,data, <span cla
 [<span class="dv">1</span>] <span class="st">&quot;aaaaaa&quot;</span> <span class="st">&quot;baabaa&quot;</span> <span class="st">&quot;aaacaa&quot;</span> <span class="st">&quot;baadaa&quot;</span>
 <span class="kw">attr</span>(,<span class="st">&quot;primkey&quot;</span>)
 [<span class="dv">1</span>] <span class="ot">TRUE</span>
-<span class="kw">predict</span>(lc,key)
+<span class="kw">predict</span>(lc,key[<span class="dv">1</span>], <span class="dt">rev =</span> <span class="ot">TRUE</span>)
       x     y
-<span class="dv">1</span> xkey1 ykey1
-<span class="dv">2</span> xkey2 ykey2
-<span class="dv">3</span> xkey1 ykey3
-<span class="dv">4</span> xkey2 ykey4</code></pre></div>
+<span class="dv">1</span> xkey1 ykey1</code></pre></div>
 </div>
 <div id="ts-features" class="section level5">
 <h5>TS Features</h5>
@@ -253,6 +250,42 @@ wl =<span class="st"> </span><span class="kw">black_list</span>(data, <span clas
 <span class="dv">8</span>            aa aa
 <span class="dv">9</span>            aa aa
 <span class="dv">10</span> black_listed aa</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">rep</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="ot">NA</span>,letters[<span class="dv">1</span>:<span class="dv">4</span>]), <span class="dv">5</span>), <span class="dt">y =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="ot">NA</span>,letters[<span class="dv">5</span>:<span class="dv">8</span>]), <span class="dv">5</span>), <span class="dt">z =</span> <span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">24</span>, <span class="ot">NA</span>), <span class="dt">zz =</span> <span class="dv">1</span>:<span class="dv">25</span>)
+lc =<span class="st"> </span><span class="kw">sparseEncoder</span>(data)
+[<span class="dv">1</span>] <span class="dv">25</span>  <span class="dv">2</span>
+[<span class="dv">1</span>] <span class="dv">25</span>  <span class="dv">7</span>
+[<span class="dv">1</span>] <span class="st">&quot;using imputer&quot;</span>
+<span class="kw">predict</span>(lc, data)
+<span class="dv">25</span> x <span class="dv">9</span> sparse Matrix of class <span class="st">&quot;dgCMatrix&quot;</span>
+   xa xb xc xd yf yg yh    z zz
+<span class="dv">1</span>   .  .  .  .  .  .  .  <span class="fl">1.0</span>  <span class="dv">1</span>
+<span class="dv">2</span>   <span class="dv">1</span>  .  .  .  .  .  .  <span class="fl">2.0</span>  <span class="dv">2</span>
+<span class="dv">3</span>   .  <span class="dv">1</span>  .  .  <span class="dv">1</span>  .  .  <span class="fl">3.0</span>  <span class="dv">3</span>
+<span class="dv">4</span>   .  .  <span class="dv">1</span>  .  .  <span class="dv">1</span>  .  <span class="fl">4.0</span>  <span class="dv">4</span>
+<span class="dv">5</span>   .  .  .  <span class="dv">1</span>  .  .  <span class="dv">1</span>  <span class="fl">5.0</span>  <span class="dv">5</span>
+<span class="dv">6</span>   .  .  .  .  .  .  .  <span class="fl">6.0</span>  <span class="dv">6</span>
+<span class="dv">7</span>   <span class="dv">1</span>  .  .  .  .  .  .  <span class="fl">7.0</span>  <span class="dv">7</span>
+<span class="dv">8</span>   .  <span class="dv">1</span>  .  .  <span class="dv">1</span>  .  .  <span class="fl">8.0</span>  <span class="dv">8</span>
+<span class="dv">9</span>   .  .  <span class="dv">1</span>  .  .  <span class="dv">1</span>  .  <span class="fl">9.0</span>  <span class="dv">9</span>
+<span class="dv">10</span>  .  .  .  <span class="dv">1</span>  .  .  <span class="dv">1</span> <span class="fl">10.0</span> <span class="dv">10</span>
+<span class="dv">11</span>  .  .  .  .  .  .  . <span class="fl">11.0</span> <span class="dv">11</span>
+<span class="dv">12</span>  <span class="dv">1</span>  .  .  .  .  .  . <span class="fl">12.0</span> <span class="dv">12</span>
+<span class="dv">13</span>  .  <span class="dv">1</span>  .  .  <span class="dv">1</span>  .  . <span class="fl">13.0</span> <span class="dv">13</span>
+<span class="dv">14</span>  .  .  <span class="dv">1</span>  .  .  <span class="dv">1</span>  . <span class="fl">14.0</span> <span class="dv">14</span>
+<span class="dv">15</span>  .  .  .  <span class="dv">1</span>  .  .  <span class="dv">1</span> <span class="fl">15.0</span> <span class="dv">15</span>
+<span class="dv">16</span>  .  .  .  .  .  .  . <span class="fl">16.0</span> <span class="dv">16</span>
+<span class="dv">17</span>  <span class="dv">1</span>  .  .  .  .  .  . <span class="fl">17.0</span> <span class="dv">17</span>
+<span class="dv">18</span>  .  <span class="dv">1</span>  .  .  <span class="dv">1</span>  .  . <span class="fl">18.0</span> <span class="dv">18</span>
+<span class="dv">19</span>  .  .  <span class="dv">1</span>  .  .  <span class="dv">1</span>  . <span class="fl">19.0</span> <span class="dv">19</span>
+<span class="dv">20</span>  .  .  .  <span class="dv">1</span>  .  .  <span class="dv">1</span> <span class="fl">20.0</span> <span class="dv">20</span>
+<span class="dv">21</span>  .  .  .  .  .  .  . <span class="fl">21.0</span> <span class="dv">21</span>
+<span class="dv">22</span>  <span class="dv">1</span>  .  .  .  .  .  . <span class="fl">22.0</span> <span class="dv">22</span>
+<span class="dv">23</span>  .  <span class="dv">1</span>  .  .  <span class="dv">1</span>  .  . <span class="fl">23.0</span> <span class="dv">23</span>
+<span class="dv">24</span>  .  .  <span class="dv">1</span>  .  .  <span class="dv">1</span>  . <span class="fl">24.0</span> <span class="dv">24</span>
+<span class="dv">25</span>  .  .  .  <span class="dv">1</span>  .  .  <span class="dv">1</span> <span class="fl">12.5</span> <span class="dv">25</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data =<span class="st"> </span><span class="kw">c</span>(<span class="st">'aabb'</span>, <span class="st">'aacc'</span>, <span class="st">'aaaa'</span>, <span class="st">'bbaa'</span>,<span class="st">'bbbb'</span>,<span class="st">'bbcc'</span>)
+preFixes =<span class="st"> </span><span class="kw">c</span>(<span class="st">'aa'</span>, <span class="st">'bb'</span>)</code></pre></div>
+<p>```</p>
 </div>
 </div>
 

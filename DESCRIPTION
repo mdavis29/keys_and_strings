@@ -1,11 +1,12 @@
 Package: keysandstrings
 Title: Keys and Strings
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: person("Matthew", "Davis", email = "mdavis29@gmail.com",
                   role = c("aut", "cre"))
-Description: recode factors in data frames, basic string manipulation
+Description: recode factors in data frames, basic string manipulation, has a sparse encoder
 Depends: 
-License: MIT 
+Imports: Matrix
+License: MIT  | file LICENSE
 LazyData: true
 RoxygenNote: 6.0.1
 Suggests: knitr,

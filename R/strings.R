@@ -37,6 +37,14 @@ chunk_string <- function(x, chunk_len=3 ){
   return(output)
 }
 
+#' @title chunk_string
+#' @param x a text string (not a vector)
+#' @param chunk_len integer nchar length of each part of the key
+#' @author Matthew Davis
+#' @description splits a string in to chunks of length chunk_len, returns a vector
+#' @return a vector of the string chuncks
+#' @export
+
 
 
 

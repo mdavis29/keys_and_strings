@@ -5,7 +5,7 @@
 \title{predict method for level_coder_obj}
 \usage{
 \method{predict}{level_coder_obj}(object, data, rev = FALSE,
-  return_primkey = FALSE, primkey_col = "primkey", verbose = FALSE, ...)
+  return_primkey = FALSE, verbose = FALSE, ...)
 }
 \arguments{
 \item{object}{a 'level_coder_obj' class object}
@@ -15,8 +15,6 @@
 \item{rev}{reverse the transformation}
 
 \item{return_primkey}{use a primary key}
-
-\item{primkey_col}{column to find the primary key}
 
 \item{verbose}{print debugging}
 
