@@ -99,7 +99,7 @@ predict.level_coder_obj<-function(object, data, is_primkey = FALSE, return_primk
     temp_obj =  object[[temp_col_name]]
     for (j in 1:nlevs){
       temp_lev = temp_levs[j]
-      if(!is.na(temp_lev)){
+      if(!is.null(temp_lev)){
         if(temp_lev %in% names(temp_obj)){
         temp_levs[temp_levs == temp_lev] = temp_obj[[temp_lev]]
         if(verbose)print(paste(temp_col_name, paste(temp_lev,'encoding')))
