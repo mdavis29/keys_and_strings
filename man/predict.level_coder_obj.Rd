@@ -4,7 +4,7 @@
 \alias{predict.level_coder_obj}
 \title{predict method for level_coder_obj}
 \usage{
-\method{predict}{level_coder_obj}(object, data, rev = FALSE,
+\method{predict}{level_coder_obj}(object, data, is_primkey = FALSE,
   return_primkey = FALSE, verbose = FALSE, ...)
 }
 \arguments{
@@ -12,7 +12,7 @@
 
 \item{data}{data frame of new data}
 
-\item{rev}{reverse the transformation}
+\item{is_primkey}{logical if the data is a primary key}
 
 \item{return_primkey}{use a primary key}
 

@@ -90,29 +90,65 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h5>level coder</h5>
 <p>replaces a factor levels in a data frame with a code that with a consistant number of characters.<br />
 This feature helps for grouped time series in the hts package that requires keys with consistant length</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">'xkey1'</span>, <span class="st">'xkey2'</span>),<span class="dv">2</span>), <span class="dt">y =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">'ykey1'</span>, <span class="st">'ykey2'</span>, <span class="st">'ykey3'</span>, <span class="st">'ykey4'</span>)))
-lc =<span class="st"> </span><span class="kw">level_coder</span>(data)
-x =<span class="st"> </span><span class="kw">predict</span>(lc, data)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">'xkey1'</span>, <span class="st">'xkey2'</span>,<span class="st">'xkey3'</span>, <span class="ot">NA</span>), <span class="dv">2</span>), 
+                  <span class="dt">y =</span> <span class="kw">c</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">'ykey1'</span>, <span class="st">'ykey2'</span>, <span class="st">'ykey3'</span>), <span class="dv">2</span>), <span class="st">'ykey1'</span>, <span class="st">''</span>))
+lc =<span class="st"> </span><span class="kw">level_coder</span>(data, <span class="dt">rm_null_levs =</span> <span class="ot">TRUE</span>)
+$x
+[<span class="dv">1</span>] <span class="st">&quot;xkey1&quot;</span> <span class="st">&quot;xkey2&quot;</span> <span class="st">&quot;xkey3&quot;</span>
+
+$y
+[<span class="dv">1</span>] <span class="st">&quot;&quot;</span>      <span class="st">&quot;ykey1&quot;</span> <span class="st">&quot;ykey2&quot;</span> <span class="st">&quot;ykey3&quot;</span>
+
+[<span class="dv">1</span>] <span class="st">&quot;removing NA levels from x&quot;</span>
+[<span class="dv">1</span>] <span class="st">&quot;removing NA levels from y&quot;</span>
+x =<span class="st"> </span><span class="kw">predict</span>(lc, data, <span class="dt">verbose =</span> <span class="ot">TRUE</span>)
+[<span class="dv">1</span>] <span class="st">&quot;encoding&quot;</span>
+[<span class="dv">1</span>] <span class="st">&quot;final dims&quot;</span>
+[<span class="dv">1</span>] <span class="dv">8</span> <span class="dv">2</span>
+[<span class="dv">1</span>] <span class="st">&quot;have_cols x,y&quot;</span>
+[<span class="dv">1</span>] <span class="st">&quot;need_cols &quot;</span>
+[<span class="dv">1</span>] <span class="st">&quot;x xkey1 encoding&quot;</span>
+[<span class="dv">1</span>] <span class="st">&quot;x xkey2 encoding&quot;</span>
+[<span class="dv">1</span>] <span class="st">&quot;x xkey3 encoding&quot;</span>
+[<span class="dv">1</span>] <span class="st">&quot;y  not founding object, mapping to NA Level&quot;</span>
+[<span class="dv">1</span>] <span class="st">&quot;y ykey1 encoding&quot;</span>
+[<span class="dv">1</span>] <span class="st">&quot;y ykey2 encoding&quot;</span>
+[<span class="dv">1</span>] <span class="st">&quot;y ykey3 encoding&quot;</span>
 <span class="kw">print</span>(x)
-    x   y
-<span class="dv">1</span> aaa aaa
-<span class="dv">2</span> baa baa
-<span class="dv">3</span> aaa caa
-<span class="dv">4</span> baa daa
+     x    y
+<span class="dv">1</span>  aaa  baa
+<span class="dv">2</span>  baa  caa
+<span class="dv">3</span>  caa  daa
+<span class="dv">4</span> &lt;<span class="ot">NA</span>&gt;<span class="st">  </span>baa
+<span class="dv">5</span>  aaa  caa
+<span class="dv">6</span>  baa  daa
+<span class="dv">7</span>  caa  baa
+<span class="dv">8</span> &lt;<span class="ot">NA</span>&gt;<span class="st"> </span><span class="er">&lt;</span><span class="ot">NA</span>&gt;
 <span class="kw">predict</span>(lc, x, <span class="dt">rev =</span> <span class="ot">TRUE</span>)
       x     y
 <span class="dv">1</span> xkey1 ykey1
 <span class="dv">2</span> xkey2 ykey2
-<span class="dv">3</span> xkey1 ykey3
-<span class="dv">4</span> xkey2 ykey4
+<span class="dv">3</span> xkey3 ykey3
+<span class="dv">4</span>  &lt;<span class="ot">NA</span>&gt;<span class="st"> </span>ykey1
+<span class="dv">5</span> xkey1 ykey2
+<span class="dv">6</span> xkey2 ykey3
+<span class="dv">7</span> xkey3 ykey1
+<span class="dv">8</span>  &lt;<span class="ot">NA</span>&gt;<span class="st">  </span><span class="er">&lt;</span><span class="ot">NA</span>&gt;
 key =<span class="st"> </span><span class="kw">predict</span>(lc,data, <span class="dt">return_primkey =</span> <span class="ot">TRUE</span>)
 <span class="kw">print</span>(key)
-[<span class="dv">1</span>] <span class="st">&quot;aaaaaa&quot;</span> <span class="st">&quot;baabaa&quot;</span> <span class="st">&quot;aaacaa&quot;</span> <span class="st">&quot;baadaa&quot;</span>
+[<span class="dv">1</span>] <span class="st">&quot;aaabaa&quot;</span> <span class="st">&quot;baacaa&quot;</span> <span class="st">&quot;caadaa&quot;</span> <span class="st">&quot;zzzbaa&quot;</span> <span class="st">&quot;aaacaa&quot;</span> <span class="st">&quot;baadaa&quot;</span> <span class="st">&quot;caabaa&quot;</span> <span class="st">&quot;zzzzzz&quot;</span>
 <span class="kw">attr</span>(,<span class="st">&quot;primkey&quot;</span>)
 [<span class="dv">1</span>] <span class="ot">TRUE</span>
-<span class="kw">predict</span>(lc,key[<span class="dv">1</span>], <span class="dt">rev =</span> <span class="ot">TRUE</span>)
+<span class="kw">predict</span>(lc,key, <span class="dt">is_primkey =</span> <span class="ot">TRUE</span>)
       x     y
-<span class="dv">1</span> xkey1 ykey1</code></pre></div>
+<span class="dv">1</span> xkey1 ykey1
+<span class="dv">2</span> xkey2 ykey2
+<span class="dv">3</span> xkey3 ykey3
+<span class="dv">4</span>  &lt;<span class="ot">NA</span>&gt;<span class="st"> </span>ykey1
+<span class="dv">5</span> xkey1 ykey2
+<span class="dv">6</span> xkey2 ykey3
+<span class="dv">7</span> xkey3 ykey1
+<span class="dv">8</span>  &lt;<span class="ot">NA</span>&gt;<span class="st">  </span><span class="er">&lt;</span><span class="ot">NA</span>&gt;</code></pre></div>
 </div>
 <div id="ts-features" class="section level5">
 <h5>TS Features</h5>

@@ -1,18 +1,21 @@
 #' @title level_coder
 #' @param data a data frame including factor variables
+#' @param rm_null_levs logical whether to remove null levels
 #' @author Matthew Davis
+#' @param verbose print debugging
 #' @description splits a string in to chunks of length chunk_len, returns a matrix
 #' @return a matrix of split text
 #' @export
 #' 
 # create the level coder object
-level_coder <- function(data){
+level_coder <- function(data, verbose = TRUE, rm_null_levs=TRUE){
   if(is.null(dim(data))){
     data = data.frame(x = as.factor(data))
   }
     
   old_levs = lapply(data, function(x)levels(x))
   old_levs =  old_levs[unlist(lapply( old_levs, function(x)!is.null(x)))]
+  if(verbose){print(old_levs)}
   new_levs = list()
   n = length(old_levs)
   codes = expand.grid(letters, letters, letters)
@@ -25,13 +28,20 @@ level_coder <- function(data){
   }
   if(!all( names(old_levs) == names(new_levs))){stop('warning level mismatch in old and new keys')}
   class(new_levs) = c('level_coder_obj', class(new_levs))
+  if(rm_null_levs){
+    n = length(new_levs)
+    for(i in 1:n){
+      if(verbose)print(paste('removing NA levels from', names(new_levs[i])))
+      new_levs[[i]] = new_levs[[i]][nchar(names(new_levs[[i]]))>0]
+    }
+  }
   return(new_levs)
 }
 
 #' @title predict method for level_coder_obj
 #' @param object a 'level_coder_obj' class object
 #' @param data data frame of new data
-#' @param rev reverse the transformation
+#' @param is_primkey logical if the data is a primary key
 #' @param return_primkey use a primary key
 #' @param ... addtional params
 #' @param verbose print debugging
@@ -40,17 +50,16 @@ level_coder <- function(data){
 #' @return a matrix of split text
 #' @export
 
-predict.level_coder_obj<-function(object, data, rev = FALSE, return_primkey = FALSE, verbose  = FALSE, ...){
+predict.level_coder_obj<-function(object, data, is_primkey = FALSE, return_primkey = FALSE, verbose = FALSE, ...){
   # case when data is a primary key
   primkey = NULL
   if(!is.null(attr(data,'primkey'))){
     if(attr(data,'primkey')){
       primkey = as.character(data)}
   }
-  if(rev & is.null(dim(data))){
+  if(is_primkey & is.null(dim(data))){
     primkey = as.character(data)
   }
- 
   # case when data is a df and contains a primary key
   if(!is.null(primkey)){
     if(verbose)print('using primary key')
@@ -58,8 +67,6 @@ predict.level_coder_obj<-function(object, data, rev = FALSE, return_primkey = FA
     if(ncol(data)!=length(names(object))){stop('key split into different numbner of columns than object names')}
     colnames(data) = names(object)
     data[data == 'zzz'] = NA
-    rev = TRUE
-    if(verbose)print(head(data))
   }
   # case when data is a factor or a matrix
   if(is.null(dim(data))){
@@ -76,7 +83,6 @@ predict.level_coder_obj<-function(object, data, rev = FALSE, return_primkey = FA
   if(verbose){
     print('final dims')
     print(dim(data))
-    print(head(data),2)
     print(paste('have_cols', paste(have_cols, collapse = ',')))
     print(paste('need_cols', paste(need_cols, collapse = ',')))
   }
@@ -87,42 +93,38 @@ predict.level_coder_obj<-function(object, data, rev = FALSE, return_primkey = FA
   for(i in 1:nc){
     temp_col_name = have_cols[i]
     temp_col  = as.factor(data[, temp_col_name])
-    if(!rev){
-      temp_old_levs = levels(temp_col)
-      temp_new_levs = object[[temp_col_name]]
-      common_levs = intersect(names(temp_new_levs), temp_old_levs )
-      if(length(common_levs)!=length(temp_old_levs)){
-        stop(paste('level found in data, not found in encoder', paste(temp_col_name)))
+    temp_levs = levels(temp_col)
+    nlevs = length(temp_levs)
+    temp_obj =  object[[temp_col_name]]
+    for (j in 1:nlevs){
+      temp_lev = temp_levs[j]
+      if(temp_lev %in% names(temp_obj)){
+        temp_levs[temp_levs == temp_lev] = temp_obj[[temp_lev]]
+        if(verbose)print(paste(temp_col_name, paste(temp_lev,'encoding')))
       }
-      levels(temp_col) = temp_new_levs[common_levs] 
-      data[, temp_col_name] = temp_col
-      
-            }
-    if(rev){
-      if(verbose)print(paste('reversing', temp_col_name))
-      temp_old_levs = levels(temp_col)
-      temp_new_levs = object[[temp_col_name]]
-      common_levs = intersect(temp_new_levs, temp_old_levs )
-      if(length(common_levs)!=length(temp_old_levs)){
-        stop(paste('level found in data, not found in encoder', paste(temp_col_name)))
+      if(temp_lev %in% temp_obj) {
+        temp_levs[temp_levs == temp_lev] = names(temp_obj)[temp_obj == temp_lev] 
+        if(verbose)print(paste(temp_col_name, paste(temp_lev,'reversing')))
       }
-      levels(temp_col) = names(temp_new_levs[temp_new_levs == common_levs]) 
-      data[, temp_col_name] = temp_col
+      if(!temp_lev %in% c(temp_obj, names(temp_obj))){
+        temp_levs[temp_levs == temp_lev] = NA
+        if(verbose)print(paste(temp_col_name, paste(temp_lev,'not founding object, mapping to NA Level')))
+      }
     }
-  } # end looping through columns
-  if(return_primkey){
-    # handels NAs in factors as zzz
-    for (i in 1:nc){
-      temp_col_name = have_cols[i]
-      temp_col = data[, temp_col_name]
-      levels(temp_col) = append(levels(temp_col), 'zzz')
-      temp_col[is.na(temp_col)] = 'zzz'
-      data[,temp_col_name] = droplevels(temp_col)
-      }
-  data = apply(data, 1, function(x)paste(x, collapse = ''))
-  attr(data, 'primkey') = TRUE
+    levels(data[, temp_col_name]) = temp_levs
   }
-  return(data)
+  if(return_primkey){
+    primkey = data.frame(data[, names(object)])
+    nc = ncol(primkey)
+    for(i in 1:nc){
+      levels(primkey[,i]) = append(levels(primkey[,i]), 'zzz')
+      primkey[is.na(primkey[,i]),i] = 'zzz'
+    }
+  primkey = apply(primkey, 1,function(x)paste(x, collapse = ''))  
+  attr(primkey, 'primkey') = TRUE
+  data = primkey
+  }
+ return(data)
 }  
 
 

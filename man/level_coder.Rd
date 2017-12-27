@@ -4,10 +4,14 @@
 \alias{level_coder}
 \title{level_coder}
 \usage{
-level_coder(data)
+level_coder(data, verbose = TRUE, rm_null_levs = TRUE)
 }
 \arguments{
 \item{data}{a data frame including factor variables}
+
+\item{verbose}{print debugging}
+
+\item{rm_null_levs}{logical whether to remove null levels}
 }
 \value{
 a matrix of split text
