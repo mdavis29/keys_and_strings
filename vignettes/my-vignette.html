@@ -90,23 +90,35 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h5>level coder</h5>
 <p>replaces a factor levels in a data frame with a code that with a consistant number of characters.<br />
 This feature helps for grouped time series in the hts package that requires keys with consistant length</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">'xkey1'</span>, <span class="st">'xkey2'</span>,<span class="st">'xkey3'</span>, <span class="ot">NA</span>), <span class="dv">2</span>), 
-                  <span class="dt">y =</span> <span class="kw">c</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">'ykey1'</span>, <span class="st">'ykey2'</span>, <span class="st">'ykey3'</span>), <span class="dv">2</span>), <span class="st">'ykey1'</span>, <span class="st">''</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">w =</span> <span class="kw">rep</span>(<span class="st">'wkey1'</span>,<span class="dv">8</span>),
+                  <span class="dt">x =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">'xkey1'</span>, <span class="st">'xkey2'</span>,<span class="st">'xkey3'</span>, <span class="ot">NA</span>), <span class="dv">2</span>), 
+                  <span class="dt">y =</span> <span class="kw">c</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">'ykey1'</span>, <span class="st">'ykey2'</span>, <span class="st">'ykey3'</span>), <span class="dv">2</span>), <span class="st">'ykey1'</span>, <span class="st">''</span>),
+                  <span class="dt">z =</span> <span class="kw">c</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">'zkey1'</span>,<span class="ot">NA</span>, <span class="st">''</span>), <span class="dv">2</span>), <span class="st">'zkey1'</span>, <span class="st">''</span>)
+                  )
 lc =<span class="st"> </span><span class="kw">level_coder</span>(data)
+$w
+[<span class="dv">1</span>] <span class="st">&quot;wkey1&quot;</span>
+
 $x
 [<span class="dv">1</span>] <span class="st">&quot;xkey1&quot;</span> <span class="st">&quot;xkey2&quot;</span> <span class="st">&quot;xkey3&quot;</span>
 
 $y
 [<span class="dv">1</span>] <span class="st">&quot;&quot;</span>      <span class="st">&quot;ykey1&quot;</span> <span class="st">&quot;ykey2&quot;</span> <span class="st">&quot;ykey3&quot;</span>
 
+$z
+[<span class="dv">1</span>] <span class="st">&quot;&quot;</span>      <span class="st">&quot;zkey1&quot;</span>
+
+[<span class="dv">1</span>] <span class="st">&quot;removing NA levels from w&quot;</span>
 [<span class="dv">1</span>] <span class="st">&quot;removing NA levels from x&quot;</span>
 [<span class="dv">1</span>] <span class="st">&quot;removing NA levels from y&quot;</span>
+[<span class="dv">1</span>] <span class="st">&quot;removing NA levels from z&quot;</span>
 x =<span class="st"> </span><span class="kw">predict</span>(lc, data, <span class="dt">verbose =</span> <span class="ot">TRUE</span>)
 [<span class="dv">1</span>] <span class="st">&quot;encoding&quot;</span>
 [<span class="dv">1</span>] <span class="st">&quot;final dims&quot;</span>
-[<span class="dv">1</span>] <span class="dv">8</span> <span class="dv">2</span>
-[<span class="dv">1</span>] <span class="st">&quot;have_cols x,y&quot;</span>
+[<span class="dv">1</span>] <span class="dv">8</span> <span class="dv">4</span>
+[<span class="dv">1</span>] <span class="st">&quot;have_cols w,x,y,z&quot;</span>
 [<span class="dv">1</span>] <span class="st">&quot;need_cols &quot;</span>
+[<span class="dv">1</span>] <span class="st">&quot;w wkey1 encoding&quot;</span>
 [<span class="dv">1</span>] <span class="st">&quot;x xkey1 encoding&quot;</span>
 [<span class="dv">1</span>] <span class="st">&quot;x xkey2 encoding&quot;</span>
 [<span class="dv">1</span>] <span class="st">&quot;x xkey3 encoding&quot;</span>
@@ -114,41 +126,49 @@ x =<span class="st"> </span><span class="kw">predict</span>(lc, data, <span clas
 [<span class="dv">1</span>] <span class="st">&quot;y ykey1 encoding&quot;</span>
 [<span class="dv">1</span>] <span class="st">&quot;y ykey2 encoding&quot;</span>
 [<span class="dv">1</span>] <span class="st">&quot;y ykey3 encoding&quot;</span>
+[<span class="dv">1</span>] <span class="st">&quot;z  not founding object, mapping to NA Level&quot;</span>
+[<span class="dv">1</span>] <span class="st">&quot;z zkey1 encoding&quot;</span>
 <span class="kw">print</span>(x)
-     x    y
-<span class="dv">1</span>  aaa  baa
-<span class="dv">2</span>  baa  caa
-<span class="dv">3</span>  caa  daa
-<span class="dv">4</span> &lt;<span class="ot">NA</span>&gt;<span class="st">  </span>baa
-<span class="dv">5</span>  aaa  caa
-<span class="dv">6</span>  baa  daa
-<span class="dv">7</span>  caa  baa
-<span class="dv">8</span> &lt;<span class="ot">NA</span>&gt;<span class="st"> </span><span class="er">&lt;</span><span class="ot">NA</span>&gt;
+    w    x    y    z
+<span class="dv">1</span> aaa  aaa  baa  baa
+<span class="dv">2</span> aaa  baa  caa &lt;<span class="ot">NA</span>&gt;
+<span class="dv">3</span> aaa  caa  daa &lt;<span class="ot">NA</span>&gt;
+<span class="dv">4</span> aaa &lt;<span class="ot">NA</span>&gt;<span class="st">  </span>baa  baa
+<span class="dv">5</span> aaa  aaa  caa &lt;<span class="ot">NA</span>&gt;
+<span class="dv">6</span> aaa  baa  daa &lt;<span class="ot">NA</span>&gt;
+<span class="dv">7</span> aaa  caa  baa  baa
+<span class="dv">8</span> aaa &lt;<span class="ot">NA</span>&gt;<span class="st"> </span><span class="er">&lt;</span><span class="ot">NA</span>&gt;<span class="st"> </span><span class="er">&lt;</span><span class="ot">NA</span>&gt;
 <span class="kw">predict</span>(lc, x, <span class="dt">rev =</span> <span class="ot">TRUE</span>)
-      x     y
-<span class="dv">1</span> xkey1 ykey1
-<span class="dv">2</span> xkey2 ykey2
-<span class="dv">3</span> xkey3 ykey3
-<span class="dv">4</span>  &lt;<span class="ot">NA</span>&gt;<span class="st"> </span>ykey1
-<span class="dv">5</span> xkey1 ykey2
-<span class="dv">6</span> xkey2 ykey3
-<span class="dv">7</span> xkey3 ykey1
-<span class="dv">8</span>  &lt;<span class="ot">NA</span>&gt;<span class="st">  </span><span class="er">&lt;</span><span class="ot">NA</span>&gt;
+      w     x     y     z
+<span class="dv">1</span> wkey1 xkey1 ykey1 zkey1
+<span class="dv">2</span> wkey1 xkey2 ykey2  &lt;<span class="ot">NA</span>&gt;
+<span class="dv">3</span> wkey1 xkey3 ykey3  &lt;<span class="ot">NA</span>&gt;
+<span class="dv">4</span> wkey1  &lt;<span class="ot">NA</span>&gt;<span class="st"> </span>ykey1 zkey1
+<span class="dv">5</span> wkey1 xkey1 ykey2  &lt;<span class="ot">NA</span>&gt;
+<span class="dv">6</span> wkey1 xkey2 ykey3  &lt;<span class="ot">NA</span>&gt;
+<span class="dv">7</span> wkey1 xkey3 ykey1 zkey1
+<span class="dv">8</span> wkey1  &lt;<span class="ot">NA</span>&gt;<span class="st">  </span><span class="er">&lt;</span><span class="ot">NA</span>&gt;<span class="st">  </span><span class="er">&lt;</span><span class="ot">NA</span>&gt;
 key =<span class="st"> </span><span class="kw">predict</span>(lc,data, <span class="dt">return_primkey =</span> <span class="ot">TRUE</span>)
 <span class="kw">print</span>(key)
-[<span class="dv">1</span>] <span class="st">&quot;aaabaa&quot;</span> <span class="st">&quot;baacaa&quot;</span> <span class="st">&quot;caadaa&quot;</span> <span class="st">&quot;zzzbaa&quot;</span> <span class="st">&quot;aaacaa&quot;</span> <span class="st">&quot;baadaa&quot;</span> <span class="st">&quot;caabaa&quot;</span> <span class="st">&quot;zzzzzz&quot;</span>
+[<span class="dv">1</span>] <span class="st">&quot;aaaaaabaabaa&quot;</span> <span class="st">&quot;aaabaacaazzz&quot;</span> <span class="st">&quot;aaacaadaazzz&quot;</span> <span class="st">&quot;aaazzzbaabaa&quot;</span>
+[<span class="dv">5</span>] <span class="st">&quot;aaaaaacaazzz&quot;</span> <span class="st">&quot;aaabaadaazzz&quot;</span> <span class="st">&quot;aaacaabaabaa&quot;</span> <span class="st">&quot;aaazzzzzzzzz&quot;</span>
 <span class="kw">attr</span>(,<span class="st">&quot;primkey&quot;</span>)
 [<span class="dv">1</span>] <span class="ot">TRUE</span>
 <span class="kw">predict</span>(lc,key, <span class="dt">is_primkey =</span> <span class="ot">TRUE</span>)
-      x     y
-<span class="dv">1</span> xkey1 ykey1
-<span class="dv">2</span> xkey2 ykey2
-<span class="dv">3</span> xkey3 ykey3
-<span class="dv">4</span>  &lt;<span class="ot">NA</span>&gt;<span class="st"> </span>ykey1
-<span class="dv">5</span> xkey1 ykey2
-<span class="dv">6</span> xkey2 ykey3
-<span class="dv">7</span> xkey3 ykey1
-<span class="dv">8</span>  &lt;<span class="ot">NA</span>&gt;<span class="st">  </span><span class="er">&lt;</span><span class="ot">NA</span>&gt;</code></pre></div>
+      w     x     y     z
+<span class="dv">1</span> wkey1 xkey1 ykey1 zkey1
+<span class="dv">2</span> wkey1 xkey2 ykey2  &lt;<span class="ot">NA</span>&gt;
+<span class="dv">3</span> wkey1 xkey3 ykey3  &lt;<span class="ot">NA</span>&gt;
+<span class="dv">4</span> wkey1  &lt;<span class="ot">NA</span>&gt;<span class="st"> </span>ykey1 zkey1
+<span class="dv">5</span> wkey1 xkey1 ykey2  &lt;<span class="ot">NA</span>&gt;
+<span class="dv">6</span> wkey1 xkey2 ykey3  &lt;<span class="ot">NA</span>&gt;
+<span class="dv">7</span> wkey1 xkey3 ykey1 zkey1
+<span class="dv">8</span> wkey1  &lt;<span class="ot">NA</span>&gt;<span class="st">  </span><span class="er">&lt;</span><span class="ot">NA</span>&gt;<span class="st">  </span><span class="er">&lt;</span><span class="ot">NA</span>&gt;
+z =<span class="st"> &quot;aaazzzzzzzzz&quot;</span>
+<span class="kw">attr</span>(z, <span class="st">'primkey'</span>) =<span class="st"> </span><span class="ot">TRUE</span>
+<span class="kw">predict</span>(lc, key[<span class="dv">8</span>] ,<span class="dt">is_primkey =</span> <span class="ot">TRUE</span>)
+      w    x    y    z
+<span class="dv">1</span> wkey1 &lt;<span class="ot">NA</span>&gt;<span class="st"> </span><span class="er">&lt;</span><span class="ot">NA</span>&gt;<span class="st"> </span><span class="er">&lt;</span><span class="ot">NA</span>&gt;</code></pre></div>
 </div>
 <div id="ts-features" class="section level5">
 <h5>TS Features</h5>

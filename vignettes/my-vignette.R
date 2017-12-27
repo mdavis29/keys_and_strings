@@ -10,8 +10,11 @@ chunk_string('aaabbbcccddd',  chunk_len=3)
 split_key(c('aaabbb', 'aaaccc','bbbaaa'),  chunk_len = 3)
 
 ## ----level coder---------------------------------------------------------
-data = data.frame(x = rep(c('xkey1', 'xkey2','xkey3', NA), 2), 
-                  y = c(rep(c('ykey1', 'ykey2', 'ykey3'), 2), 'ykey1', ''))
+data = data.frame(w = rep('wkey1',8),
+                  x = rep(c('xkey1', 'xkey2','xkey3', NA), 2), 
+                  y = c(rep(c('ykey1', 'ykey2', 'ykey3'), 2), 'ykey1', ''),
+                  z = c(rep(c('zkey1',NA, ''), 2), 'zkey1', '')
+                  )
 lc = level_coder(data)
 x = predict(lc, data, verbose = TRUE)
 print(x)
@@ -19,6 +22,9 @@ predict(lc, x, rev = TRUE)
 key = predict(lc,data, return_primkey = TRUE)
 print(key)
 predict(lc,key, is_primkey = TRUE)
+z = "aaazzzzzzzzz"
+attr(z, 'primkey') = TRUE
+predict(lc, key[8] ,is_primkey = TRUE)
 
 ## ----tsfeatures----------------------------------------------------------
 head(ts_features(AirPassengers),2)
