@@ -67,6 +67,7 @@ predict.level_coder_obj<-function(object, data, is_primkey = FALSE, return_primk
     if(ncol(data)!=length(names(object))){stop('key split into different numbner of columns than object names')}
     colnames(data) = names(object)
     data[data == 'zzz'] = NA
+    data = droplevels(data.frame(data))
   }
   # case when data is a factor or a matrix
   if(is.null(dim(data))){
