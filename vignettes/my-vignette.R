@@ -12,7 +12,7 @@ split_key(c('aaabbb', 'aaaccc','bbbaaa'),  chunk_len = 3)
 ## ----level coder---------------------------------------------------------
 data = data.frame(x = rep(c('xkey1', 'xkey2','xkey3', NA), 2), 
                   y = c(rep(c('ykey1', 'ykey2', 'ykey3'), 2), 'ykey1', ''))
-lc = level_coder(data, rm_null_levs = TRUE)
+lc = level_coder(data)
 x = predict(lc, data, verbose = TRUE)
 print(x)
 predict(lc, x, rev = TRUE)

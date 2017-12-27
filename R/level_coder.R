@@ -99,17 +99,19 @@ predict.level_coder_obj<-function(object, data, is_primkey = FALSE, return_primk
     temp_obj =  object[[temp_col_name]]
     for (j in 1:nlevs){
       temp_lev = temp_levs[j]
-      if(temp_lev %in% names(temp_obj)){
+      if(!is.na(temp_lev)){
+        if(temp_lev %in% names(temp_obj)){
         temp_levs[temp_levs == temp_lev] = temp_obj[[temp_lev]]
         if(verbose)print(paste(temp_col_name, paste(temp_lev,'encoding')))
       }
-      if(temp_lev %in% temp_obj) {
+        if(temp_lev %in% temp_obj) {
         temp_levs[temp_levs == temp_lev] = names(temp_obj)[temp_obj == temp_lev] 
         if(verbose)print(paste(temp_col_name, paste(temp_lev,'reversing')))
       }
-      if(!temp_lev %in% c(temp_obj, names(temp_obj))){
+        if(!temp_lev %in% c(temp_obj, names(temp_obj))){
         temp_levs[temp_levs == temp_lev] = NA
         if(verbose)print(paste(temp_col_name, paste(temp_lev,'not founding object, mapping to NA Level')))
+        }
       }
     }
     levels(data[, temp_col_name]) = temp_levs

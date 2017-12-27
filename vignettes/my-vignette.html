@@ -92,7 +92,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 This feature helps for grouped time series in the hts package that requires keys with consistant length</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">'xkey1'</span>, <span class="st">'xkey2'</span>,<span class="st">'xkey3'</span>, <span class="ot">NA</span>), <span class="dv">2</span>), 
                   <span class="dt">y =</span> <span class="kw">c</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">'ykey1'</span>, <span class="st">'ykey2'</span>, <span class="st">'ykey3'</span>), <span class="dv">2</span>), <span class="st">'ykey1'</span>, <span class="st">''</span>))
-lc =<span class="st"> </span><span class="kw">level_coder</span>(data, <span class="dt">rm_null_levs =</span> <span class="ot">TRUE</span>)
+lc =<span class="st"> </span><span class="kw">level_coder</span>(data)
 $x
 [<span class="dv">1</span>] <span class="st">&quot;xkey1&quot;</span> <span class="st">&quot;xkey2&quot;</span> <span class="st">&quot;xkey3&quot;</span>
 
