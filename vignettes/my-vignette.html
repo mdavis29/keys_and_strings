@@ -12,7 +12,7 @@
 
 <meta name="author" content="Matthew Davis" />
 
-<meta name="date" content="2017-12-27" />
+<meta name="date" content="2017-12-28" />
 
 <title>Keys and Strings</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Keys and Strings</h1>
 <h4 class="author"><em>Matthew Davis</em></h4>
-<h4 class="date"><em>2017-12-27</em></h4>
+<h4 class="date"><em>2017-12-28</em></h4>
 
 
 
@@ -341,7 +341,23 @@ lc =<span class="st"> </span><span class="kw">sparseEncoder</span>(data)
 <span class="dv">25</span>  .  .  .  <span class="dv">1</span>  .  .  <span class="dv">1</span> <span class="fl">12.5</span> <span class="dv">25</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data =<span class="st"> </span><span class="kw">c</span>(<span class="st">'aabb'</span>, <span class="st">'aacc'</span>, <span class="st">'aaaa'</span>, <span class="st">'bbaa'</span>,<span class="st">'bbbb'</span>,<span class="st">'bbcc'</span>)
 preFixes =<span class="st"> </span><span class="kw">c</span>(<span class="st">'aa'</span>, <span class="st">'bb'</span>)</code></pre></div>
-<p>```</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw">c</span>(<span class="dv">201209</span>,<span class="dv">201212</span>, <span class="dv">201301</span>)
+<span class="kw">cp_add</span>(x,<span class="dv">2</span>)
+[<span class="dv">1</span>] <span class="dv">201211</span> <span class="dv">201302</span> <span class="dv">201303</span>
+<span class="kw">cp_to_fp</span>(x)
+[<span class="dv">1</span>] <span class="dv">201303</span> <span class="dv">201306</span> <span class="dv">201307</span>
+<span class="kw">attr</span>(,<span class="st">&quot;fiscal&quot;</span>)
+[<span class="dv">1</span>] <span class="ot">TRUE</span>
+<span class="kw">cp_to_fp</span>(<span class="kw">cp_to_fp</span>(x), <span class="dt">rev =</span> <span class="ot">TRUE</span>)
+[<span class="dv">1</span>] <span class="dv">201209</span> <span class="dv">201212</span> <span class="dv">201301</span>
+<span class="kw">attr</span>(,<span class="st">&quot;fiscal&quot;</span>)
+[<span class="dv">1</span>] <span class="ot">FALSE</span>
+<span class="kw">cp_seq</span>(<span class="dv">201201</span>,<span class="dv">6</span>)
+[<span class="dv">1</span>] <span class="dv">201201</span> <span class="dv">201202</span> <span class="dv">201203</span> <span class="dv">201204</span> <span class="dv">201205</span> <span class="dv">201206</span>
+<span class="kw">cp_to_calendar</span>(<span class="kw">c</span>(<span class="dv">201712</span>,<span class="dv">201801</span>))
+     holidays_weekends biz_days
+[<span class="dv">1</span>,]                <span class="dv">11</span>       <span class="dv">20</span>
+[<span class="dv">2</span>,]                 <span class="dv">8</span>       <span class="dv">23</span></code></pre></div>
 </div>
 </div>
 

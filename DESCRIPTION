@@ -5,7 +5,7 @@ Authors@R: person("Matthew", "Davis", email = "mdavis29@gmail.com",
                   role = c("aut", "cre"))
 Description: recode factors in data frames, basic string manipulation, has a sparse encoder
 Depends: 
-Imports: Matrix
+Imports: Matrix, timeDate
 License: MIT  | file LICENSE
 LazyData: true
 RoxygenNote: 6.0.1
