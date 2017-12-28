@@ -106,6 +106,9 @@ predict(bl, data, keep_rows = TRUE)
 
 ```
 
+##### Sparse Encoder
+
+Catagory Sparse Encoder 
 
 ```{r sparse encoder}
 data = data.frame(x = rep(x = c(NA,letters[1:4]), 5), y = rep(c(NA,letters[5:8]), 5), z = c(1:24, NA), zz = 1:25)
@@ -114,16 +117,10 @@ predict(lc, data)
 
 ```
 
+##### Calendar Period Functions
 
-
-```{r find strings}
-data = c('aabb', 'aacc', 'aaaa', 'bbaa','bbbb','bbcc')
-preFixes = c('aa', 'bb')
-```
-
-
-
-
+Simple functions for manipulating calendar periods
+ 
 ```{r cp functions}
 x = c(201209,201212, 201301)
 cp_add(x,2)
