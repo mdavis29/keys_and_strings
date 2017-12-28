@@ -98,34 +98,34 @@ cp_to_calendar_1 = function(x, fp = FALSE){
   return(output)
 }
 
-#' @title CP to Calendar non parallel
-#' @param x int calendar period to start ie 201202
-#' @param fp whether the calindar period is fiscal 
-#' @author Matthew Davis
-#' @description creates a sequence of calendar periods
-#' @return a vector of business days and holiday/weekends
-#' @export
-
-cp_to_calendar_np = function(x, fp = FALSE){
-  t(sapply(x, function(y)cp_to_calendar_1(y, fp = fp)))
-  }
-  
 #' @title CP to Calendar 
 #' @param x int calendar period to start ie 201202
 #' @param fp whether the calindar period is fiscal 
+#' @param par use parallel package
 #' @author Matthew Davis
 #' @import parallel
 #' @description creates a sequence of calendar periods
 #' @return a vector of business days and holiday/weekends
 #' @export 
 
-cp_to_calendar = function(x, fp = FALSE){
-  cores = parallel::detectCores()
-  cl = parallel::makeCluster(cores)
-  parallel::clusterEvalQ(cl, library(keysandstrings))
-  output = parallel::clusterApply(cl, x=x, fun = cp_to_calendar_np )
-  parallel::stopCluster(cl)
-  output = matrix(unlist(output), ncol = 2, nrow = length(x), byrow = TRUE, dimnames = list(NULL, c("holidays_weekends", "biz_days")))
-  return(output)
+cp_to_calendar = function(x, fp = FALSE, par = TRUE ){
+  u = unique(x)
+  if(!par){
+    lookup_mat = t(sapply(u, function(y)cp_to_calendar_1(y, fp = fp)))
+    dimnames(lookup_mat) = list(u,  c('holidays_weekends', 'biz_days'))
+    output_mat = t(sapply(x, function(y)lookup_mat[rownames(lookup_mat) == y,]))
+  }
+  if(par){
+    cores = parallel::detectCores()
+    cl = parallel::makeCluster(cores)
+    parallel::clusterEvalQ(cl, library(keysandstrings))
+    output = parallel::clusterApply(cl, x=u, fun = cp_to_calendar_1 )
+    parallel::stopCluster(cl)
+    lookup_mat = matrix(unlist(output), ncol = 2, nrow = length(u), byrow = TRUE, dimnames = list(u,NULL))
+    output_mat = t(sapply(x, function(y)lookup_mat[rownames(lookup_mat) == y,]))
+    colnames(output_mat) = c('holidays_weekends', 'biz_days')
+  }
+  return(output_mat)
 }
+
 

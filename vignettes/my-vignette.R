@@ -74,15 +74,13 @@ lc = sparseEncoder(data)
 predict(lc, data)
 
 
-## ----find strings--------------------------------------------------------
-data = c('aabb', 'aacc', 'aaaa', 'bbaa','bbbb','bbcc')
-preFixes = c('aa', 'bb')
-
 ## ----cp functions--------------------------------------------------------
 x = c(201209,201212, 201301)
 cp_add(x,2)
 cp_to_fp(x)
 cp_to_fp(cp_to_fp(x), rev = TRUE)
 cp_seq(201201,6)
-cp_to_calendar(c(201712,201801))
+x = rep(cp_seq(200011, 250),2)
+system.time(cp_to_calendar(cp_seq(201201,100)))
+system.time(cp_to_calendar(cp_seq(201201,100), par = FALSE))
 

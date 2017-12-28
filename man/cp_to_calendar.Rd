@@ -4,12 +4,14 @@
 \alias{cp_to_calendar}
 \title{CP to Calendar}
 \usage{
-cp_to_calendar(x, fp = FALSE)
+cp_to_calendar(x, fp = FALSE, par = TRUE)
 }
 \arguments{
 \item{x}{int calendar period to start ie 201202}
 
 \item{fp}{whether the calindar period is fiscal}
+
+\item{par}{use parallel package}
 }
 \value{
 a vector of business days and holiday/weekends

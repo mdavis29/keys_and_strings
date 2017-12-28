@@ -1,6 +1,6 @@
 Package: keysandstrings
 Title: Keys and Strings
-Version: 0.1.3
+Version: 0.1.4
 Authors@R: person("Matthew", "Davis", email = "mdavis29@gmail.com",
                   role = c("aut", "cre"))
 Description: recode factors in data frames, basic string manipulation, has a sparse encoder

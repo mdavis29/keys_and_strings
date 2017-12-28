@@ -306,6 +306,10 @@ wl =<span class="st"> </span><span class="kw">black_list</span>(data, <span clas
 <span class="dv">8</span>            aa aa
 <span class="dv">9</span>            aa aa
 <span class="dv">10</span> black_listed aa</code></pre></div>
+</div>
+<div id="sparse-encoder" class="section level5">
+<h5>Sparse Encoder</h5>
+<p>Catagory Sparse Encoder</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">rep</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="ot">NA</span>,letters[<span class="dv">1</span>:<span class="dv">4</span>]), <span class="dv">5</span>), <span class="dt">y =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="ot">NA</span>,letters[<span class="dv">5</span>:<span class="dv">8</span>]), <span class="dv">5</span>), <span class="dt">z =</span> <span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">24</span>, <span class="ot">NA</span>), <span class="dt">zz =</span> <span class="dv">1</span>:<span class="dv">25</span>)
 lc =<span class="st"> </span><span class="kw">sparseEncoder</span>(data)
 [<span class="dv">1</span>] <span class="dv">25</span>  <span class="dv">2</span>
@@ -339,8 +343,10 @@ lc =<span class="st"> </span><span class="kw">sparseEncoder</span>(data)
 <span class="dv">23</span>  .  <span class="dv">1</span>  .  .  <span class="dv">1</span>  .  . <span class="fl">23.0</span> <span class="dv">23</span>
 <span class="dv">24</span>  .  .  <span class="dv">1</span>  .  .  <span class="dv">1</span>  . <span class="fl">24.0</span> <span class="dv">24</span>
 <span class="dv">25</span>  .  .  .  <span class="dv">1</span>  .  .  <span class="dv">1</span> <span class="fl">12.5</span> <span class="dv">25</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data =<span class="st"> </span><span class="kw">c</span>(<span class="st">'aabb'</span>, <span class="st">'aacc'</span>, <span class="st">'aaaa'</span>, <span class="st">'bbaa'</span>,<span class="st">'bbbb'</span>,<span class="st">'bbcc'</span>)
-preFixes =<span class="st"> </span><span class="kw">c</span>(<span class="st">'aa'</span>, <span class="st">'bb'</span>)</code></pre></div>
+</div>
+<div id="calendar-period-functions" class="section level5">
+<h5>Calendar Period Functions</h5>
+<p>Simple functions for manipulating calendar periods</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw">c</span>(<span class="dv">201209</span>,<span class="dv">201212</span>, <span class="dv">201301</span>)
 <span class="kw">cp_add</span>(x,<span class="dv">2</span>)
 [<span class="dv">1</span>] <span class="dv">201211</span> <span class="dv">201302</span> <span class="dv">201303</span>
@@ -354,10 +360,13 @@ preFixes =<span class="st"> </span><span class="kw">c</span>(<span class="st">'a
 [<span class="dv">1</span>] <span class="ot">FALSE</span>
 <span class="kw">cp_seq</span>(<span class="dv">201201</span>,<span class="dv">6</span>)
 [<span class="dv">1</span>] <span class="dv">201201</span> <span class="dv">201202</span> <span class="dv">201203</span> <span class="dv">201204</span> <span class="dv">201205</span> <span class="dv">201206</span>
-<span class="kw">cp_to_calendar</span>(<span class="kw">c</span>(<span class="dv">201712</span>,<span class="dv">201801</span>))
-     holidays_weekends biz_days
-[<span class="dv">1</span>,]                <span class="dv">11</span>       <span class="dv">20</span>
-[<span class="dv">2</span>,]                 <span class="dv">8</span>       <span class="dv">23</span></code></pre></div>
+x =<span class="st"> </span><span class="kw">rep</span>(<span class="kw">cp_seq</span>(<span class="dv">200011</span>, <span class="dv">250</span>),<span class="dv">2</span>)
+<span class="kw">system.time</span>(<span class="kw">cp_to_calendar</span>(<span class="kw">cp_seq</span>(<span class="dv">201201</span>,<span class="dv">100</span>)))
+   user  system elapsed 
+   <span class="fl">0.07</span>    <span class="fl">0.00</span>    <span class="fl">4.88</span> 
+<span class="kw">system.time</span>(<span class="kw">cp_to_calendar</span>(<span class="kw">cp_seq</span>(<span class="dv">201201</span>,<span class="dv">100</span>), <span class="dt">par =</span> <span class="ot">FALSE</span>))
+   user  system elapsed 
+   <span class="fl">6.06</span>    <span class="fl">0.00</span>    <span class="fl">6.07</span> </code></pre></div>
 </div>
 </div>
 
