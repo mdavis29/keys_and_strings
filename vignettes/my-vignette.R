@@ -86,4 +86,3 @@ cp_to_fp(cp_to_fp(x), rev = TRUE)
 cp_seq(201201,6)
 cp_to_calendar(c(201712,201801))
 
-

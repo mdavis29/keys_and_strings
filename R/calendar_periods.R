@@ -4,7 +4,7 @@
 #' @author Matthew Davis
 #' @description adds months to a calendar period, hidden helper function
 #' @return a integet calendar period
-#' 
+#' @export
 cp_add_1 = function(x, n){
   x = as.character(x)
   y = as.numeric(substr(x, 1,4))
@@ -76,7 +76,8 @@ cp_seq = function(x, n = 6, use_first = TRUE){
 #' @import timeDate
 #' @description finds holidays and buisness days for a calendar period
 #' @return a vector of business days and holiday/weekends
-#' 
+#' @export
+
 cp_to_calendar_1 = function(x, fp = FALSE){
   if(!is.null(attr(x, 'fiscal'))){
     if(attr(x, 'fiscal'))fp= TRUE
@@ -97,7 +98,7 @@ cp_to_calendar_1 = function(x, fp = FALSE){
   return(output)
 }
 
-#' @title CP to Calendar 
+#' @title CP to Calendar non parallel
 #' @param x int calendar period to start ie 201202
 #' @param fp whether the calindar period is fiscal 
 #' @author Matthew Davis
@@ -105,8 +106,26 @@ cp_to_calendar_1 = function(x, fp = FALSE){
 #' @return a vector of business days and holiday/weekends
 #' @export
 
-cp_to_calendar = function(x, fp = FALSE){
+cp_to_calendar_np = function(x, fp = FALSE){
   t(sapply(x, function(y)cp_to_calendar_1(y, fp = fp)))
   }
   
-  
+#' @title CP to Calendar 
+#' @param x int calendar period to start ie 201202
+#' @param fp whether the calindar period is fiscal 
+#' @author Matthew Davis
+#' @import parallel
+#' @description creates a sequence of calendar periods
+#' @return a vector of business days and holiday/weekends
+#' @export 
+
+cp_to_calendar = function(x, fp = FALSE){
+  cores = parallel::detectCores()
+  cl = parallel::makeCluster(cores)
+  parallel::clusterEvalQ(cl, library(keysandstrings))
+  output = parallel::clusterApply(cl, x=x, fun = cp_to_calendar_np )
+  parallel::stopCluster(cl)
+  output = matrix(unlist(output), ncol = 2, nrow = length(x), byrow = TRUE, dimnames = list(NULL, c("holidays_weekends", "biz_days")))
+  return(output)
+}
+
