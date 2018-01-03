@@ -132,3 +132,10 @@ system.time(cp_to_calendar(cp_seq(201201,100)))
 system.time(cp_to_calendar(cp_seq(201201,100), par = FALSE))
 ```
 
+##### Mising CP
+
+```{r missing_cp}
+
+data = c(201201+0:5, 201301+6:11)
+missing_cp(data)
+```
