@@ -60,7 +60,7 @@ keyscale = function(data, val_col = NULL, key_col = NULL, verbose = FALSE){
 
 predict.keyscale_obj <- function(object, data, unscale = FALSE, verbose = FALSE, ...){
   dsattr = attr(data, 'scaled')
-  have_cols = intersect(colnames(names(object$scales[[1]])), colnames(data))
+  have_cols = intersect(colnames(object$scales[[1]]), colnames(data))
   keys = names(object$scales)
   keys = na.omit(keys)
   key_col = object$key_col
@@ -80,7 +80,10 @@ predict.keyscale_obj <- function(object, data, unscale = FALSE, verbose = FALSE,
     temp_key = keys[i]
     temp_data = matrix(data[data[,key_col] == temp_key, have_cols ], 
                           ncol = length(have_cols), dimnames = list(NULL, have_cols) )
-    temp_scale = object$scales[[temp_key]][, have_cols]
+    temp_scale = matrix(object$scales[[temp_key]][, have_cols], 
+                        nrow = 2, 
+                        ncol = length(have_cols),
+                        dimnames = list(c('means', 'sds'), have_cols))  
     if(unscale){ 
       if(verbose)print('using unscaler')
       for (j in 1:nc){
