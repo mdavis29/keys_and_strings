@@ -60,6 +60,9 @@ predict.keyscale_obj <- function(object, data, unscale = FALSE, verbose = FALSE,
   have_cols = intersect(colnames(object$scales[[1]]), colnames(data))
   keys = names(object$scales)
   key_col = object$key_col
+  new_keys = setdiff(unique(data[,object$key_col]),names(object$scales) )
+  lnk = length(new_keys)
+  if(lnk>0){print(paste(lnk,'new keys found, passing through unscaled', sep = ':'))}
   nkeys = length(keys)
   nc = length(have_cols)
   if(!is.null(dsattr)){
@@ -71,12 +74,17 @@ predict.keyscale_obj <- function(object, data, unscale = FALSE, verbose = FALSE,
   }
     for (i in 1:nkeys){
     temp_key = keys[i]
-    temp_data = data[data[,key_col] == temp_key, have_cols ]
+    temp_data = matrix(data[data[,key_col] == temp_key, have_cols ], 
+                          ncol = length(have_cols), dimnames = list(NULL, have_cols) )
     temp_scale = object$scales[[temp_key]][, have_cols]
     if(unscale){ 
-      if(verbose)print('unscaling')
+      if(verbose)print('using unscaler')
       for (j in 1:nc){
         temp_col = have_cols[j]
+        if(verbose){
+          print(paste('unscaling key',paste(temp_key, temp_col, sep = ':'), sep = ':'))
+          print(paste('with length', nrow(temp_data)))
+        }
         temp_data[,temp_col] =temp_data[, temp_col]*temp_scale[2,temp_col] + temp_scale[1,temp_col] 
         data[data[,key_col] == temp_key, temp_col] = temp_data[, temp_col]
       }
@@ -84,9 +92,13 @@ predict.keyscale_obj <- function(object, data, unscale = FALSE, verbose = FALSE,
     } # end unscaling case
     
     if(!unscale){
-      if(verbose){print('scaling')}
+      if(verbose){print('using scaler')}
       for (j in 1:nc){
         temp_col = have_cols[j]
+        if(verbose){
+          print(paste('scaling key',paste(temp_key, temp_col, sep = ':'), sep = ':'))
+          print(paste('with length', nrow(temp_data)))
+        }
         temp_data[, temp_col]=(temp_data[, temp_col] - temp_scale[1,temp_col])/temp_scale[2,temp_col] 
         data[data[,key_col] == temp_key, temp_col] = temp_data[, temp_col]
       }
