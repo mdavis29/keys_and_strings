@@ -39,6 +39,9 @@ keyscale = function(data, val_col = NULL, key_col = NULL, verbose = FALSE){
   names(key_output) = keys
   output = list(scales = key_output, key_col = key_col)
   class(output) = append('keyscale_obj', class(output))
+  for (i in 1:(length(output$scales))){
+    colnames(output$scales[[i]]) = val_col
+  }
   return(output)
 }
 
@@ -57,12 +60,13 @@ keyscale = function(data, val_col = NULL, key_col = NULL, verbose = FALSE){
 
 predict.keyscale_obj <- function(object, data, unscale = FALSE, verbose = FALSE, ...){
   dsattr = attr(data, 'scaled')
-  have_cols = intersect(colnames(object$scales[[1]]), colnames(data))
+  have_cols = intersect(colnames(names(object$scales[[1]])), colnames(data))
   keys = names(object$scales)
+  keys = na.omit(keys)
   key_col = object$key_col
   new_keys = setdiff(unique(data[,object$key_col]),names(object$scales) )
   lnk = length(new_keys)
-  if(lnk>0){print(paste(lnk,'new keys found, passing through unscaled', sep = ':'))}
+  if(lnk>0){warning(paste(lnk,'new keys found, passing through unscaled', sep = ':'))}
   nkeys = length(keys)
   nc = length(have_cols)
   if(!is.null(dsattr)){
