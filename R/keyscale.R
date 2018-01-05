@@ -27,7 +27,7 @@ keyscale = function(data, val_col = NULL, key_col = NULL, verbose = FALSE){
   if(verbose)print(paste('val_col', paste(val_col, collapse = ',')))
   for(i in 1:nkeys){
     temp_key = keys[i]
-    temp_data = data[data[, key_col] == temp_key, val_col]
+    temp_data = as.matrix(data[data[, key_col] == temp_key, val_col])
     means = apply(temp_data,2,mean, na.rm = TRUE)
     means[is.na(means)] = 0
     sds = apply(temp_data,2,sd, na.rm = TRUE)

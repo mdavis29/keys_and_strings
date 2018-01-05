@@ -83,12 +83,12 @@ new_data[ order(new_data$key, new_data$date),]
 Center and Scale new data, and uncenter and scale, all optional primary key ( creates a scale for each column and each set of keyed rows ) 
 
 ```{r keyscaler}
-data = as.matrix(data.frame(key = c(rep(1,40), rep(2,40)), 
+data = as.matrix(data.frame(key = c(rep(1,40), rep(2,39), 3), 
                   val1 =  c(1:79, NA), 
                   val2 = c(1:80), 
                   val3 = rep(1, 80))) 
 head(data)
-ks = keyscale(data, key_col = 'key')
+ks = keyscale(data,  key_col = 'key')
 x = predict(ks, data)
 head(x)
 head(predict(ks, x))
